@@ -1,5 +1,7 @@
 # C64 AI Chat
 
+![C64 AI Chat](social_preview.png)
+
 Talk to modern AI models from a real Commodore 64 over your local network.
 
 A Python proxy server with a tkinter GUI runs on your PC and bridges the gap

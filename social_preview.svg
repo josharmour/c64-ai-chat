@@ -1,0 +1,393 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <!-- Scanline pattern for CRT effect -->
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="2" fill="rgba(0,0,0,0.12)"/>
+    </pattern>
+    <!-- Screen glow -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textglow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Outer CRT glow -->
+    <filter id="crtglow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Pixel grid for 8-bit feel -->
+    <pattern id="pixelgrid" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background - dark retro workspace -->
+  <rect width="1280" height="640" fill="#1a1a2e"/>
+
+  <!-- Subtle grid background -->
+  <rect width="1280" height="640" fill="url(#pixelgrid)"/>
+
+  <!-- ========== C64 MONITOR/SCREEN ========== -->
+  <!-- Monitor outer bezel -->
+  <rect x="60" y="40" width="580" height="440" rx="12" fill="#8B7355" stroke="#6B5335" stroke-width="3"/>
+  <!-- Monitor inner bezel -->
+  <rect x="75" y="55" width="550" height="410" rx="8" fill="#5C4A32"/>
+  <!-- Screen border (C64 light blue border) -->
+  <rect x="90" y="70" width="520" height="380" rx="4" fill="#6C6CFF"/>
+  <!-- Screen area (C64 dark blue) -->
+  <rect x="110" y="90" width="480" height="340" fill="#4040E0"/>
+  <!-- Scanlines over screen -->
+  <rect x="110" y="90" width="480" height="340" fill="url(#scanlines)"/>
+
+  <!-- Screen content - C64 style text -->
+  <g filter="url(#textglow)">
+    <!-- C64 startup look -->
+    <text x="130" y="125" font-family="monospace" font-size="15" fill="#6C6CFF" letter-spacing="1">
+      **** COMMODORE 64 AI CHAT ****
+    </text>
+    <text x="130" y="150" font-family="monospace" font-size="13" fill="#6C6CFF" letter-spacing="1">
+      64K RAM SYSTEM
+    </text>
+
+    <!-- Chat conversation -->
+    <text x="130" y="185" font-family="monospace" font-size="14" fill="#6C6CFF" letter-spacing="1">
+      CLAUDE>
+    </text>
+    <text x="130" y="210" font-family="monospace" font-size="13" fill="#A0A0FF" letter-spacing="1">
+      WHAT IS THE MEANING OF LIFE?
+    </text>
+
+    <text x="130" y="245" font-family="monospace" font-size="13" fill="#E0E0FF" letter-spacing="0.5">
+      THE MEANING OF LIFE IS A DEEPLY
+    </text>
+    <text x="130" y="265" font-family="monospace" font-size="13" fill="#E0E0FF" letter-spacing="0.5">
+      PERSONAL JOURNEY. SOME FIND IT
+    </text>
+    <text x="130" y="285" font-family="monospace" font-size="13" fill="#E0E0FF" letter-spacing="0.5">
+      IN CONNECTION, CREATIVITY, OR
+    </text>
+    <text x="130" y="305" font-family="monospace" font-size="13" fill="#E0E0FF" letter-spacing="0.5">
+      THE PURSUIT OF KNOWLEDGE...
+    </text>
+
+    <!-- Blinking cursor -->
+    <rect x="130" y="325" width="10" height="14" fill="#6C6CFF">
+      <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="130" y="337" font-family="monospace" font-size="14" fill="#6C6CFF" letter-spacing="1">
+      _
+    </text>
+
+    <!-- Status line -->
+    <text x="130" y="405" font-family="monospace" font-size="11" fill="#5050C0" letter-spacing="1">
+      /PROVIDER  /MODEL  /HELP  QUIT
+    </text>
+  </g>
+
+  <!-- Monitor stand -->
+  <rect x="270" y="480" width="160" height="15" rx="2" fill="#7A6545"/>
+  <rect x="300" y="495" width="100" height="25" rx="2" fill="#6B5335"/>
+
+  <!-- ========== C64 KEYBOARD ========== -->
+  <!-- Keyboard body -->
+  <rect x="80" y="530" width="540" height="85" rx="6" fill="#8B7355" stroke="#6B5335" stroke-width="2"/>
+
+  <!-- Keyboard keys - row 1 -->
+  <g fill="#5C4A32" stroke="#4A3822" stroke-width="1">
+    <rect x="95" y="540" width="22" height="16" rx="2"/>
+    <rect x="121" y="540" width="22" height="16" rx="2"/>
+    <rect x="147" y="540" width="22" height="16" rx="2"/>
+    <rect x="173" y="540" width="22" height="16" rx="2"/>
+    <rect x="199" y="540" width="22" height="16" rx="2"/>
+    <rect x="225" y="540" width="22" height="16" rx="2"/>
+    <rect x="251" y="540" width="22" height="16" rx="2"/>
+    <rect x="277" y="540" width="22" height="16" rx="2"/>
+    <rect x="303" y="540" width="22" height="16" rx="2"/>
+    <rect x="329" y="540" width="22" height="16" rx="2"/>
+    <rect x="355" y="540" width="22" height="16" rx="2"/>
+    <rect x="381" y="540" width="22" height="16" rx="2"/>
+    <rect x="407" y="540" width="22" height="16" rx="2"/>
+    <rect x="433" y="540" width="22" height="16" rx="2"/>
+    <rect x="459" y="540" width="22" height="16" rx="2"/>
+    <rect x="485" y="540" width="22" height="16" rx="2"/>
+    <rect x="511" y="540" width="22" height="16" rx="2"/>
+    <rect x="537" y="540" width="22" height="16" rx="2"/>
+    <rect x="563" y="540" width="38" height="16" rx="2"/>
+  </g>
+  <!-- Row 2 -->
+  <g fill="#5C4A32" stroke="#4A3822" stroke-width="1">
+    <rect x="95" y="560" width="30" height="16" rx="2"/>
+    <rect x="129" y="560" width="22" height="16" rx="2"/>
+    <rect x="155" y="560" width="22" height="16" rx="2"/>
+    <rect x="181" y="560" width="22" height="16" rx="2"/>
+    <rect x="207" y="560" width="22" height="16" rx="2"/>
+    <rect x="233" y="560" width="22" height="16" rx="2"/>
+    <rect x="259" y="560" width="22" height="16" rx="2"/>
+    <rect x="285" y="560" width="22" height="16" rx="2"/>
+    <rect x="311" y="560" width="22" height="16" rx="2"/>
+    <rect x="337" y="560" width="22" height="16" rx="2"/>
+    <rect x="363" y="560" width="22" height="16" rx="2"/>
+    <rect x="389" y="560" width="22" height="16" rx="2"/>
+    <rect x="415" y="560" width="22" height="16" rx="2"/>
+    <rect x="441" y="560" width="22" height="16" rx="2"/>
+    <rect x="467" y="560" width="22" height="16" rx="2"/>
+    <rect x="493" y="560" width="22" height="16" rx="2"/>
+    <rect x="519" y="560" width="22" height="16" rx="2"/>
+    <rect x="545" y="560" width="56" height="16" rx="2"/>
+  </g>
+  <!-- Row 3 - with space bar -->
+  <g fill="#5C4A32" stroke="#4A3822" stroke-width="1">
+    <rect x="95" y="580" width="38" height="16" rx="2"/>
+    <rect x="137" y="580" width="22" height="16" rx="2"/>
+    <rect x="163" y="580" width="22" height="16" rx="2"/>
+    <rect x="189" y="580" width="22" height="16" rx="2"/>
+    <rect x="215" y="580" width="22" height="16" rx="2"/>
+    <rect x="241" y="580" width="22" height="16" rx="2"/>
+    <rect x="267" y="580" width="22" height="16" rx="2"/>
+    <rect x="293" y="580" width="22" height="16" rx="2"/>
+    <rect x="319" y="580" width="22" height="16" rx="2"/>
+    <rect x="345" y="580" width="22" height="16" rx="2"/>
+    <rect x="371" y="580" width="22" height="16" rx="2"/>
+    <rect x="397" y="580" width="22" height="16" rx="2"/>
+    <rect x="423" y="580" width="22" height="16" rx="2"/>
+    <rect x="449" y="580" width="152" height="16" rx="2"/>
+  </g>
+
+  <!-- C= key highlight -->
+  <rect x="95" y="580" width="38" height="16" rx="2" fill="#4040E0" stroke="#3030B0" stroke-width="1"/>
+
+  <!-- F-keys on the right side -->
+  <g fill="#6B5335" stroke="#5A4325" stroke-width="1">
+    <rect x="565" y="560" width="36" height="16" rx="2"/>
+    <rect x="565" y="580" width="36" height="16" rx="2"/>
+  </g>
+
+  <!-- ========== RIGHT SIDE: AI PROVIDERS + TITLE ========== -->
+
+  <!-- Main title -->
+  <g filter="url(#crtglow)">
+    <!-- "C64" in large pixel style -->
+    <text x="780" y="120" font-family="monospace" font-weight="bold" font-size="72" fill="#6C6CFF" letter-spacing="6">
+      C64
+    </text>
+    <text x="780" y="180" font-family="monospace" font-weight="bold" font-size="52" fill="#A0A0FF" letter-spacing="4">
+      AI CHAT
+    </text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="780" y="220" font-family="monospace" font-size="16" fill="#7878AA" letter-spacing="1">
+    MODERN AI ON VINTAGE HARDWARE
+  </text>
+
+  <!-- Divider line - pixel style -->
+  <g fill="#6C6CFF" opacity="0.5">
+    <rect x="780" y="238" width="8" height="4"/>
+    <rect x="796" y="238" width="8" height="4"/>
+    <rect x="812" y="238" width="8" height="4"/>
+    <rect x="828" y="238" width="8" height="4"/>
+    <rect x="844" y="238" width="8" height="4"/>
+    <rect x="860" y="238" width="8" height="4"/>
+    <rect x="876" y="238" width="8" height="4"/>
+    <rect x="892" y="238" width="8" height="4"/>
+    <rect x="908" y="238" width="8" height="4"/>
+    <rect x="924" y="238" width="8" height="4"/>
+    <rect x="940" y="238" width="8" height="4"/>
+    <rect x="956" y="238" width="8" height="4"/>
+    <rect x="972" y="238" width="8" height="4"/>
+    <rect x="988" y="238" width="8" height="4"/>
+    <rect x="1004" y="238" width="8" height="4"/>
+    <rect x="1020" y="238" width="8" height="4"/>
+    <rect x="1036" y="238" width="8" height="4"/>
+    <rect x="1052" y="238" width="8" height="4"/>
+    <rect x="1068" y="238" width="8" height="4"/>
+    <rect x="1084" y="238" width="8" height="4"/>
+    <rect x="1100" y="238" width="8" height="4"/>
+    <rect x="1116" y="238" width="8" height="4"/>
+    <rect x="1132" y="238" width="8" height="4"/>
+    <rect x="1148" y="238" width="8" height="4"/>
+  </g>
+
+  <!-- AI Provider icons - pixel art style boxes -->
+  <!-- Claude -->
+  <g transform="translate(780, 270)">
+    <rect width="160" height="60" rx="4" fill="rgba(108,108,255,0.15)" stroke="#6C6CFF" stroke-width="2"/>
+    <!-- Pixel brain icon -->
+    <g fill="#FF8C6C">
+      <rect x="15" y="12" width="6" height="6"/>
+      <rect x="21" y="12" width="6" height="6"/>
+      <rect x="27" y="12" width="6" height="6"/>
+      <rect x="9" y="18" width="6" height="6"/>
+      <rect x="15" y="18" width="6" height="6"/>
+      <rect x="27" y="18" width="6" height="6"/>
+      <rect x="33" y="18" width="6" height="6"/>
+      <rect x="9" y="24" width="6" height="6"/>
+      <rect x="15" y="24" width="6" height="6"/>
+      <rect x="21" y="24" width="6" height="6"/>
+      <rect x="27" y="24" width="6" height="6"/>
+      <rect x="33" y="24" width="6" height="6"/>
+      <rect x="15" y="30" width="6" height="6"/>
+      <rect x="21" y="30" width="6" height="6"/>
+      <rect x="27" y="30" width="6" height="6"/>
+      <rect x="9" y="36" width="6" height="6"/>
+      <rect x="15" y="36" width="6" height="6"/>
+      <rect x="27" y="36" width="6" height="6"/>
+      <rect x="33" y="36" width="6" height="6"/>
+    </g>
+    <text x="52" y="38" font-family="monospace" font-weight="bold" font-size="18" fill="#FF8C6C">CLAUDE</text>
+  </g>
+
+  <!-- Gemini -->
+  <g transform="translate(960, 270)">
+    <rect width="160" height="60" rx="4" fill="rgba(108,108,255,0.15)" stroke="#6C6CFF" stroke-width="2"/>
+    <!-- Pixel star/sparkle icon -->
+    <g fill="#4ECDC4">
+      <rect x="21" y="10" width="6" height="6"/>
+      <rect x="15" y="16" width="6" height="6"/>
+      <rect x="21" y="16" width="6" height="6"/>
+      <rect x="27" y="16" width="6" height="6"/>
+      <rect x="9" y="22" width="6" height="6"/>
+      <rect x="15" y="22" width="6" height="6"/>
+      <rect x="21" y="22" width="6" height="6"/>
+      <rect x="27" y="22" width="6" height="6"/>
+      <rect x="33" y="22" width="6" height="6"/>
+      <rect x="15" y="28" width="6" height="6"/>
+      <rect x="21" y="28" width="6" height="6"/>
+      <rect x="27" y="28" width="6" height="6"/>
+      <rect x="21" y="34" width="6" height="6"/>
+      <rect x="9" y="40" width="6" height="6"/>
+      <rect x="33" y="40" width="6" height="6"/>
+    </g>
+    <text x="48" y="38" font-family="monospace" font-weight="bold" font-size="18" fill="#4ECDC4">GEMINI</text>
+  </g>
+
+  <!-- OpenAI -->
+  <g transform="translate(780, 350)">
+    <rect width="160" height="60" rx="4" fill="rgba(108,108,255,0.15)" stroke="#6C6CFF" stroke-width="2"/>
+    <!-- Pixel hexagon/circle icon -->
+    <g fill="#74D477">
+      <rect x="15" y="12" width="6" height="6"/>
+      <rect x="21" y="12" width="6" height="6"/>
+      <rect x="27" y="12" width="6" height="6"/>
+      <rect x="9" y="18" width="6" height="6"/>
+      <rect x="33" y="18" width="6" height="6"/>
+      <rect x="9" y="24" width="6" height="6"/>
+      <rect x="21" y="24" width="6" height="6"/>
+      <rect x="33" y="24" width="6" height="6"/>
+      <rect x="9" y="30" width="6" height="6"/>
+      <rect x="33" y="30" width="6" height="6"/>
+      <rect x="15" y="36" width="6" height="6"/>
+      <rect x="21" y="36" width="6" height="6"/>
+      <rect x="27" y="36" width="6" height="6"/>
+    </g>
+    <text x="48" y="38" font-family="monospace" font-weight="bold" font-size="18" fill="#74D477">OPENAI</text>
+  </g>
+
+  <!-- Ollama -->
+  <g transform="translate(960, 350)">
+    <rect width="160" height="60" rx="4" fill="rgba(108,108,255,0.15)" stroke="#6C6CFF" stroke-width="2"/>
+    <!-- Pixel llama icon -->
+    <g fill="#FFD93D">
+      <rect x="27" y="10" width="6" height="6"/>
+      <rect x="21" y="16" width="6" height="6"/>
+      <rect x="27" y="16" width="6" height="6"/>
+      <rect x="15" y="22" width="6" height="6"/>
+      <rect x="21" y="22" width="6" height="6"/>
+      <rect x="27" y="22" width="6" height="6"/>
+      <rect x="33" y="22" width="6" height="6"/>
+      <rect x="15" y="28" width="6" height="6"/>
+      <rect x="21" y="28" width="6" height="6"/>
+      <rect x="15" y="34" width="6" height="6"/>
+      <rect x="21" y="34" width="6" height="6"/>
+      <rect x="33" y="28" width="6" height="6"/>
+      <rect x="33" y="34" width="6" height="6"/>
+      <rect x="15" y="40" width="6" height="6"/>
+      <rect x="33" y="40" width="6" height="6"/>
+    </g>
+    <text x="48" y="38" font-family="monospace" font-weight="bold" font-size="18" fill="#FFD93D">OLLAMA</text>
+  </g>
+
+  <!-- Connection arrows - pixel style data flow from providers to C64 -->
+  <!-- Arrow from providers toward C64 -->
+  <g fill="#6C6CFF" opacity="0.6">
+    <!-- Data stream dots flowing left -->
+    <rect x="720" y="320" width="6" height="6">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="700" y="320" width="6" height="6">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="680" y="320" width="6" height="6">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </rect>
+    <rect x="740" y="320" width="6" height="6">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+    </rect>
+    <rect x="760" y="320" width="6" height="6">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" begin="1s"/>
+    </rect>
+  </g>
+
+  <!-- "PYTHON PROXY" label between C64 and providers -->
+  <g transform="translate(680, 280)">
+    <rect x="0" y="0" width="90" height="24" rx="3" fill="rgba(108,108,255,0.2)" stroke="#6C6CFF" stroke-width="1" stroke-dasharray="4,2"/>
+    <text x="8" y="16" font-family="monospace" font-size="10" fill="#8888CC" letter-spacing="0.5">PY PROXY</text>
+  </g>
+
+  <!-- Bottom info bar -->
+  <rect x="0" y="620" width="1280" height="20" fill="rgba(108,108,255,0.1)"/>
+  <text x="640" y="635" font-family="monospace" font-size="12" fill="#5555AA" text-anchor="middle" letter-spacing="2">
+    GITHUB.COM/JOSHARMOUR/C64-AI-CHAT
+  </text>
+
+  <!-- Pixel art decorative corners -->
+  <g fill="#6C6CFF" opacity="0.3">
+    <!-- Top-left -->
+    <rect x="20" y="10" width="8" height="8"/>
+    <rect x="32" y="10" width="8" height="8"/>
+    <rect x="20" y="22" width="8" height="8"/>
+    <!-- Top-right -->
+    <rect x="1252" y="10" width="8" height="8"/>
+    <rect x="1240" y="10" width="8" height="8"/>
+    <rect x="1252" y="22" width="8" height="8"/>
+    <!-- Bottom-left -->
+    <rect x="20" y="600" width="8" height="8"/>
+    <rect x="32" y="600" width="8" height="8"/>
+    <rect x="20" y="588" width="8" height="8"/>
+    <!-- Bottom-right -->
+    <rect x="1252" y="600" width="8" height="8"/>
+    <rect x="1240" y="600" width="8" height="8"/>
+    <rect x="1252" y="588" width="8" height="8"/>
+  </g>
+
+  <!-- Floating pixel particles for ambiance -->
+  <g fill="#6C6CFF" opacity="0.2">
+    <rect x="1100" y="480" width="4" height="4">
+      <animate attributeName="y" values="480;460;480" dur="4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="850" y="450" width="4" height="4">
+      <animate attributeName="y" values="450;430;450" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1000" y="500" width="4" height="4">
+      <animate attributeName="y" values="500;475;500" dur="5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1180" y="440" width="4" height="4">
+      <animate attributeName="y" values="440;420;440" dur="3.5s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Subtle vignette overlay -->
+  <rect width="1280" height="640" fill="url(#scanlines)" opacity="0.3"/>
+</svg>
