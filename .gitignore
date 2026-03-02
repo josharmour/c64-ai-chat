@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+c64_ai_proxy_config.json
+c64_ai_chat.log
+c64_chat.log
+*.txt
