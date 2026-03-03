@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Unified C64 AI Proxy Server with tkinter GUI.
-Supports Claude, Gemini, OpenAI, and Ollama backends with dynamic model discovery.
+Supports Claude, Gemini, OpenAI, Ollama, and LM Studio backends with dynamic model discovery.
 Single port 6464, bind 0.0.0.0.
 Pure Python stdlib + tkinter — no pip installs needed.
 """
