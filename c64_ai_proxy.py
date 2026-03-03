@@ -751,7 +751,7 @@ class AIProxyGUI:
 
         self.show_key_var = tk.BooleanVar(value=False)
         self.show_key_btn = tk.Checkbutton(
-            frame_key, text="Show", variable=self.show_key_var,
+            self.frame_key, text="Show", variable=self.show_key_var,
             command=self._toggle_key_visibility,
         )
         self.show_key_btn.pack(side=tk.LEFT, padx=4)
