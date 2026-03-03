@@ -14,6 +14,7 @@ over Ethernet (SwiftLink/ACIA) or a WiFi modem.
 | Provider | Requirements |
 |----------|-------------|
 | **Ollama** | Local install of [Ollama](https://ollama.com) — free, no API key |
+| **LM Studio** | Local install of [LM Studio](https://lmstudio.ai) — free, no API key |
 | **Google Gemini** | Free API key from [Google AI Studio](https://aistudio.google.com/apikey) |
 | **Anthropic Claude** | API key from [Anthropic Console](https://console.anthropic.com) |
 | **OpenAI** | API key from [OpenAI Platform](https://platform.openai.com/api-keys) |
@@ -120,7 +121,7 @@ Once connected, type these at the prompt:
 
 | Command | Action |
 |---------|--------|
-| `/provider` | Switch AI backend (Claude/Gemini/OpenAI/Ollama) |
+| `/provider` | Switch AI backend (Claude/Gemini/OpenAI/Ollama/LM Studio) |
 | `/model` | Browse and switch models for the current provider |
 | `/help` | Show available commands |
 | `clear` | Clear chat history and screen |
@@ -179,4 +180,4 @@ Transfer the new `aichat.prg` to your C64.
 
 This project is open source. Use it, share it, modify it.
 # c64-ai-chat
-Chat with AI from a real Commodore 64 — supports Claude, Gemini, OpenAI, and Ollama
+Chat with AI from a real Commodore 64 — supports Claude, Gemini, OpenAI, Ollama, and LM Studio

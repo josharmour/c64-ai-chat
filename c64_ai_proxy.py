@@ -207,8 +207,12 @@ class OllamaProvider:
     env_key = None
 
     @staticmethod
-    def probe_models(_api_key):
-        url = "http://localhost:11434/api/tags"
+    def probe_models(base_url):
+        if not base_url:
+            base_url = "http://localhost:11434"
+        if not base_url.startswith("http"):
+            base_url = f"http://{base_url}"
+        url = f"{base_url.rstrip('/')}/api/tags"
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req, timeout=5) as resp:
             data = json.loads(resp.read().decode())
@@ -221,8 +225,12 @@ class OllamaProvider:
         return models
 
     @staticmethod
-    def build_request(prompt, history, model, _api_key):
-        url = "http://localhost:11434/api/chat"
+    def build_request(prompt, history, model, base_url):
+        if not base_url:
+            base_url = "http://localhost:11434"
+        if not base_url.startswith("http"):
+            base_url = f"http://{base_url}"
+        url = f"{base_url.rstrip('/')}/api/chat"
         headers = {'Content-Type': 'application/json'}
         messages = []
         for msg in history:
@@ -245,11 +253,62 @@ class OllamaProvider:
         return "user", "assistant"
 
 
+class LMStudioProvider:
+    name = "LM Studio"
+    env_key = None
+
+    @staticmethod
+    def probe_models(base_url):
+        if not base_url:
+            base_url = "http://localhost:1234"
+        if not base_url.startswith("http"):
+            base_url = f"http://{base_url}"
+        url = f"{base_url.rstrip('/')}/v1/models"
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode())
+        models = []
+        for m in data.get("data", []):
+            mid = m.get("id", "")
+            if mid:
+                models.append(mid)
+        models.sort()
+        return models
+
+    @staticmethod
+    def build_request(prompt, history, model, base_url):
+        if not base_url:
+            base_url = "http://localhost:1234"
+        if not base_url.startswith("http"):
+            base_url = f"http://{base_url}"
+        url = f"{base_url.rstrip('/')}/v1/chat/completions"
+        headers = {'Content-Type': 'application/json'}
+        messages = []
+        for msg in history:
+            role = "assistant" if msg["role"] == "model" else msg["role"]
+            messages.append({"role": role, "content": msg["text"]})
+        messages.append({"role": "user", "content": prompt})
+        payload = {
+            "model": model,
+            "messages": messages,
+        }
+        return url, headers, payload
+
+    @staticmethod
+    def parse_response(result):
+        return result['choices'][0]['message']['content']
+
+    @staticmethod
+    def history_roles():
+        return "user", "assistant"
+
+
 PROVIDERS = {
     "Claude": ClaudeProvider,
     "Gemini": GeminiProvider,
     "OpenAI": OpenAIProvider,
     "Ollama": OllamaProvider,
+    "LM Studio": LMStudioProvider,
 }
 
 # ---------------------------------------------------------------------------
@@ -651,7 +710,8 @@ class AIProxyGUI:
             "Claude": self._config.get("key_Claude", os.environ.get("ANTHROPIC_API_KEY", "")),
             "Gemini": self._config.get("key_Gemini", os.environ.get("GEMINI_API_KEY", "")),
             "OpenAI": self._config.get("key_OpenAI", os.environ.get("OPENAI_API_KEY", "")),
-            "Ollama": "",
+            "Ollama": self._config.get("key_Ollama", "localhost:11434"),
+            "LM Studio": self._config.get("key_LM Studio", "localhost:1234"),
         }
         self._saved_provider = self._config.get("provider", "Claude")
         self._saved_model = self._config.get("model", "")
@@ -676,17 +736,17 @@ class AIProxyGUI:
         frame_prov.pack(fill=tk.X, **pad)
 
         self.provider_var = tk.StringVar(value="Claude")
-        for name in ("Claude", "Gemini", "OpenAI", "Ollama"):
+        for name in ("Claude", "Gemini", "OpenAI", "Ollama", "LM Studio"):
             tk.Radiobutton(
                 frame_prov, text=name, variable=self.provider_var,
                 value=name, command=self._on_provider_change,
             ).pack(side=tk.LEFT, padx=6, pady=4)
 
         # --- API Key ---
-        frame_key = tk.LabelFrame(self.root, text="API Key")
-        frame_key.pack(fill=tk.X, **pad)
+        self.frame_key = tk.LabelFrame(self.root, text="API Key")
+        self.frame_key.pack(fill=tk.X, **pad)
 
-        self.key_entry = tk.Entry(frame_key, show="*", width=60)
+        self.key_entry = tk.Entry(self.frame_key, show="*", width=60)
         self.key_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=4, pady=4)
 
         self.show_key_var = tk.BooleanVar(value=False)
@@ -770,11 +830,18 @@ class AIProxyGUI:
         # Load stored key for new provider
         self.key_entry.delete(0, tk.END)
         self.key_entry.insert(0, self._api_keys.get(prov, ""))
-        # Disable key entry for Ollama
-        if prov == "Ollama":
-            self.key_entry.configure(state=tk.DISABLED)
+
+        # Update UI based on provider
+        if prov in ("Ollama", "LM Studio"):
+            self.frame_key.configure(text="Server Address (host:port)")
+            self.show_key_btn.pack_forget()
+            self.key_entry.configure(show="")
         else:
-            self.key_entry.configure(state=tk.NORMAL)
+            self.frame_key.configure(text="API Key")
+            self.show_key_btn.pack(side=tk.LEFT, padx=4)
+            self._toggle_key_visibility()
+
+        self.key_entry.configure(state=tk.NORMAL)
         # Clear model list
         self._clear_models()
         self._sync_server()
@@ -782,14 +849,13 @@ class AIProxyGUI:
     def _save_current_key(self):
         """Persist the key entry value for the currently-selected provider."""
         prov = self.provider_var.get()
-        if prov != "Ollama":
-            try:
-                val = self.key_entry.get()
-                # Don't overwrite a saved key with empty during startup
-                if val or not self._api_keys.get(prov, ""):
-                    self._api_keys[prov] = val
-            except Exception:
-                pass
+        try:
+            val = self.key_entry.get()
+            # Don't overwrite a saved key with empty during startup
+            if val or not self._api_keys.get(prov, ""):
+                self._api_keys[prov] = val
+        except Exception:
+            pass
 
     def _toggle_key_visibility(self):
         self.key_entry.configure(show="" if self.show_key_var.get() else "*")
@@ -855,7 +921,7 @@ class AIProxyGUI:
             if not model:
                 self._append_log("ERROR: Select a model first (use Probe Models).")
                 return
-            if prov != "Ollama" and not api_key:
+            if prov not in ("Ollama", "LM Studio") and not api_key:
                 self._append_log("ERROR: API key required.")
                 return
             self.server.provider_name = prov
@@ -886,7 +952,7 @@ class AIProxyGUI:
             "provider": self.provider_var.get(),
             "model": self.model_var.get(),
         }
-        for prov in ("Claude", "Gemini", "OpenAI"):
+        for prov in ("Claude", "Gemini", "OpenAI", "Ollama", "LM Studio"):
             cfg[f"key_{prov}"] = self._api_keys.get(prov, "")
         save_config(cfg)
 
