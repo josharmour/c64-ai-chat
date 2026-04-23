@@ -1,0 +1,15 @@
+.git
+.gitignore
+README.md
+social_preview.*
+run_ai_proxy.bat
+aichat.prg
+aichat.bas
+bas2prg.py
+data/
+.env
+.env.example
+Dockerfile
+docker-compose.yml
+__pycache__/
+*.pyc

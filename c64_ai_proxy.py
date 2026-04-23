@@ -14,9 +14,17 @@ import urllib.error
 import os
 import textwrap
 import re
-import tkinter as tk
-from tkinter import scrolledtext
 from datetime import datetime
+
+# tkinter is only required for the GUI entry point. Import lazily so the
+# server module can be used from a headless runner (e.g. in Docker) where
+# Tk shared libraries aren't installed.
+try:
+    import tkinter as tk
+    from tkinter import scrolledtext
+except ImportError:
+    tk = None
+    scrolledtext = None
 
 # ---------------------------------------------------------------------------
 # Utility functions (from existing proxies)

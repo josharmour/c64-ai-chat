@@ -1,0 +1,13 @@
+services:
+  c64-ai-chat:
+    build: .
+    image: c64-ai-chat:latest
+    container_name: c64-ai-chat
+    restart: unless-stopped
+    ports:
+      - "6464:6464"
+    env_file:
+      - .env
+    # /data holds c64_ai_chat.log and (optional) c64_ai_proxy_config.json
+    volumes:
+      - ./data:/data
