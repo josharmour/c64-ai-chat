@@ -518,7 +518,8 @@ class ProxyServer:
         # Show initial welcome with whatever backend is active
         provider_label = provider_cls.name.upper()
         welcome = f"\r\n*** COMMODORE 64 AI CHAT ***\r\n"
-        welcome += f"BACKEND: {provider_label} / {model.upper()}\r\n\r\n"
+        welcome += f"BACKEND: {provider_label} / {model.upper()}\r\n"
+        welcome += f"TYPE /HELP FOR COMMANDS.\r\n\r\n"
         try:
             self._send_c64(conn, welcome, output_lines)
         except (BrokenPipeError, ConnectionResetError, OSError) as e:
@@ -617,12 +618,29 @@ class ProxyServer:
                     continue
 
                 if prompt.upper() in ("/HELP", "HELP", "?"):
-                    self._send_c64(conn, "\r\n", output_lines)
-                    self._send_c64(conn, "COMMANDS:\r\n", output_lines)
-                    self._send_c64(conn, "  /PROVIDER - SWITCH AI BACKEND\r\n", output_lines)
-                    self._send_c64(conn, "  /MODEL    - SWITCH MODEL\r\n", output_lines)
-                    self._send_c64(conn, "  CLEAR     - CLEAR CHAT HISTORY\r\n", output_lines)
-                    self._send_c64(conn, "  QUIT      - DISCONNECT\r\n", output_lines)
+                    help_lines = [
+                        "",
+                        "COMMANDS:",
+                        "  /HELP      SHOW THIS HELP",
+                        "  /PROVIDER  SWITCH AI BACKEND",
+                        "  /MODEL     SWITCH MODEL",
+                        "  CLEAR      CLEAR CHAT HISTORY",
+                        "  QUIT       DISCONNECT",
+                        "",
+                        "EDITING:",
+                        "  DEL        FIX TYPO (BACKSPACE)",
+                        "",
+                        "SCROLLBACK (REVIEW PAST OUTPUT):",
+                        "  SHIFT+CRSR  ENTER SCROLLBACK",
+                        "  CRSR UP     PAGE UP",
+                        "  SHIFT+CRSR  PAGE DOWN",
+                        "  ANY KEY     RETURN TO PROMPT",
+                        "",
+                        "TIP: REPLIES ARE WRAPPED AT 40 COLS.",
+                        "     USE SCROLLBACK FOR LONG ANSWERS.",
+                    ]
+                    for line in help_lines:
+                        self._send_c64(conn, f"{line}\r\n", output_lines)
                     continue
 
                 self._send_c64(conn, "\r\n\r\nTHINKING...\r\n", output_lines)
