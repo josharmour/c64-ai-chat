@@ -519,7 +519,19 @@ class ProxyServer:
         provider_label = provider_cls.name.upper()
         welcome = f"\r\n*** COMMODORE 64 AI CHAT ***\r\n"
         welcome += f"BACKEND: {provider_label} / {model.upper()}\r\n\r\n"
-        self._send_c64(conn, welcome, output_lines)
+        try:
+            self._send_c64(conn, welcome, output_lines)
+        except (BrokenPipeError, ConnectionResetError, OSError) as e:
+            # Modem / SwiftLink clients sometimes open the TCP connection,
+            # fail the ATDT handshake, and close before we finish the send.
+            # That shows up as "CONNECTION then ERROR" on the C64 side.
+            self._log(f"[WELCOME SEND FAILED] {addr[0]}:{addr[1]}: {e!r}")
+            try:
+                conn.close()
+            except Exception:
+                pass
+            return
+        self._log(f"[WELCOME SENT] {addr[0]}:{addr[1]} ({len(welcome)} bytes)")
 
         try:
             while self._running:
@@ -657,15 +669,26 @@ class ProxyServer:
         srv.listen(5)
         srv.settimeout(1.0)
         self._server_socket = srv
-        self._log(f"Server RUNNING on port {PORT}")
+        try:
+            bound = srv.getsockname()
+            self._log(f"Server RUNNING on {bound[0]}:{bound[1]} (listening for C64 clients)")
+        except Exception:
+            self._log(f"Server RUNNING on port {PORT}")
 
         while self._running:
             try:
                 conn, addr = srv.accept()
             except socket.timeout:
                 continue
-            except OSError:
+            except OSError as e:
+                # Log the specific reason rather than silently exiting — e.g.
+                # socket closed from another thread vs. a real failure.
+                self._log(f"[ACCEPT FAILED] {e!r}")
                 break
+            # Trace every accepted socket BEFORE spawning the handler thread
+            # so we can tell whether a half-open / short-lived TCP connect
+            # (modem ATDT that bails immediately) ever reached the proxy.
+            self._log(f"[ACCEPT] peer={addr[0]}:{addr[1]}")
             # Snapshot current config for this connection
             provider_cls = PROVIDERS.get(self.provider_name, ClaudeProvider)
             model = self.model
