@@ -43,28 +43,65 @@ over Ethernet (SwiftLink/ACIA) or a WiFi modem.
 
 ## Quick Start
 
-### 1. Start the proxy on your PC
+There are two ways to run the proxy on your PC: the **GUI app** (easiest if
+you want to click buttons) or **Docker** (easiest if you want a headless
+service that restarts itself).
 
-**Windows:** Double-click `run_ai_proxy.bat`
+### Option A — GUI app
 
-**Mac/Linux:** Run `python3 c64_ai_proxy.py`
-
-A GUI window will appear.
-
-### 2. Configure a backend
-
-1. Select a provider (Ollama is easiest to start with — no API key needed)
-2. Paste your API key if required (Ollama doesn't need one)
-3. Click **Probe Models** — available models will appear
-4. Select a model from the list
+1. **Windows:** double-click `run_ai_proxy.bat`. **Mac/Linux:** run
+   `python3 c64_ai_proxy.py`. A GUI window appears.
+2. Select a provider (Ollama is the easiest starting point — no API key).
+3. Paste your API key if required.
+4. Click **Probe Models**, then select a model from the list.
+5. Click **Start Server**. Status should show **RUNNING** on port 6464.
 
 Your API keys and last selection are saved automatically.
 
-### 3. Start the server
+### Option B — Docker (recommended for Ollama)
 
-Click **Start Server**. The status should show **RUNNING** on port 6464.
+The repo ships with a `Dockerfile` and `docker-compose.yml` that run a
+headless version of the proxy. Config is via environment variables.
 
-### 4. Transfer aichat.prg to your C64
+**Recommended combo: Ollama + `gemma4:latest`.** Gemma 4 is Google's
+open-weight model — fast, good at conversation, and fits comfortably on
+modern consumer GPUs. Pull it once with:
+
+```
+ollama pull gemma4:latest
+```
+
+Then in the repo:
+
+```
+cp .env.example .env
+# edit .env if you want a different model or provider
+docker compose up -d
+```
+
+That's it — the proxy is now listening on port 6464 and will auto-restart
+on boot or crash. Point your C64 at `<your-PC-LAN-IP>:6464`.
+
+Check logs any time with `docker compose logs -f`.
+
+**Env vars (all optional except the key for your chosen cloud provider):**
+
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `C64_PROVIDER` | `Claude`, `Gemini`, `OpenAI`, `Ollama`, or `LM Studio` | `Ollama` |
+| `C64_MODEL` | Model id for the active provider | (blank — pick with `/MODEL` on the C64) |
+| `ANTHROPIC_API_KEY` | Claude | — |
+| `GEMINI_API_KEY` | Gemini | — |
+| `OPENAI_API_KEY` | OpenAI | — |
+| `OLLAMA_URL` | host:port of your Ollama server | `host.docker.internal:11434` |
+| `LMSTUDIO_URL` | host:port of your LM Studio server | `host.docker.internal:1234` |
+
+`host.docker.internal` resolves to the Docker host on Windows, Mac, and
+WSL2, so an Ollama install on your PC works out of the box. On Linux
+(non-WSL) you may need to use your LAN IP or add
+`extra_hosts: ["host.docker.internal:host-gateway"]` to the compose file.
+
+### Transfer aichat.prg to your C64
 
 Copy `aichat.prg` to your C64's SD card via FTP, USB, or however you
 normally transfer files. Then on the C64:
@@ -74,7 +111,7 @@ LOAD "AICHAT",8,1
 RUN
 ```
 
-### 5. Connect
+### Connect
 
 The program will ask for the server address. Enter your PC's local IP
 and port, for example:
