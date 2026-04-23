@@ -158,14 +158,30 @@ Once connected, type these at the prompt:
 
 | Command | Action |
 |---------|--------|
+| `/help` | Show on-screen help (commands, editing, scrollback) |
+| `/info` | Show server status (provider, model, port, uptime) |
 | `/provider` | Switch AI backend (Claude/Gemini/OpenAI/Ollama/LM Studio) |
 | `/model` | Browse and switch models for the current provider |
-| `/help` | Show available commands |
 | `clear` | Clear chat history and screen |
 | `quit` | Disconnect |
 
 You can also switch providers and models from the PC-side GUI at any time —
 the C64 prompt updates on the next interaction.
+
+## C64 Function Keys
+
+`aichat.prg` maps the F-keys to the most common commands so you don't have
+to type the slash every time:
+
+| Key | Action |
+|-----|--------|
+| **F1** | Disconnect |
+| **F3** | Send `/help` |
+| **F5** | Send `/model` (change model) |
+| **F7** | Send `clear` (wipe chat history + screen) |
+
+Press the F-key **at the prompt**, not mid-sentence — F-keys inject the
+command string, so whatever you were typing would be prepended to it.
 
 ## Scrollback
 

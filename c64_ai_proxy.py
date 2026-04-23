@@ -352,6 +352,7 @@ class ProxyServer:
         self._running = False
         self._thread = None
         self._log_cb = log_callback
+        self._start_time = datetime.now()
         # Backend config
         self.provider_name = "Claude"
         self.model = ""
@@ -617,11 +618,39 @@ class ProxyServer:
                     self._cmd_model(conn, output_lines, chat_history)
                     continue
 
+                if prompt.upper() == "/INFO":
+                    delta = datetime.now() - self._start_time
+                    total = int(delta.total_seconds())
+                    hh, rem = divmod(total, 3600)
+                    mm, ss = divmod(rem, 60)
+                    uptime = f"{hh:02d}:{mm:02d}:{ss:02d}"
+                    info_lines = [
+                        "",
+                        "SERVER INFO:",
+                        f"  PROVIDER:  {self.provider_name.upper()}",
+                        f"  MODEL:     {self.model.upper() or '(NONE)'}",
+                        f"  PORT:      {PORT}",
+                        f"  UPTIME:    {uptime}",
+                        "",
+                        "PROVIDERS AVAILABLE:",
+                    ]
+                    for p in PROVIDERS:
+                        info_lines.append(f"  - {p.upper()}")
+                    info_lines += [
+                        "",
+                        "USE /PROVIDER TO SWITCH BACKEND.",
+                        "USE /MODEL TO PICK A MODEL.",
+                    ]
+                    for line in info_lines:
+                        self._send_c64(conn, f"{line}\r\n", output_lines)
+                    continue
+
                 if prompt.upper() in ("/HELP", "HELP", "?"):
                     help_lines = [
                         "",
                         "COMMANDS:",
                         "  /HELP      SHOW THIS HELP",
+                        "  /INFO      SHOW SERVER STATUS",
                         "  /PROVIDER  SWITCH AI BACKEND",
                         "  /MODEL     SWITCH MODEL",
                         "  CLEAR      CLEAR CHAT HISTORY",
